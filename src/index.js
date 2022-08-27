@@ -12,12 +12,7 @@ app.use(express.json())
 app.use(morgan('dev'))
 app.use(cors())
 
-app.get('/', (req, res, next) => {
-  return res.json({
-    success: true, 
-    data: 'Hello world'
-  })
-})
+app.use(require('./api')(db))
 app.use(require('./middlewares/path-not-found'))
 app.use(require('./middlewares/error-handler'))
 

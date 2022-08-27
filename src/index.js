@@ -16,6 +16,9 @@ app.use(require('./api')(db))
 app.use(require('./middlewares/path-not-found'))
 app.use(require('./middlewares/error-handler'))
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log('✅ Server up')
-})
+if (process.env.NODE_ENV !== 'test')
+  app.listen(process.env.PORT || 3000, () => {
+    console.log('✅ Server up')
+  })
+
+module.exports = { app }

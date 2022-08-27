@@ -12,12 +12,14 @@ app.use(express.json())
 app.use(morgan('dev'))
 app.use(cors())
 
-app.use('/', (req, res, next) => {
+app.get('/', (req, res, next) => {
   return res.json({
     success: true, 
     data: 'Hello world'
   })
 })
+app.use(require('./middlewares/path-not-found'))
+app.use(require('./middlewares/error-handler'))
 
 app.listen(process.env.PORT || 3000, () => {
   console.log('✅ Server up')

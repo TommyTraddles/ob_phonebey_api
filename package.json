@@ -1,0 +1,22 @@
+{
+  "name": "webscrap",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "seed": "NODE_ENV=development node --trace-warnings script/index.js",
+    "docker:up": "docker-compose down && docker-compose up"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "slonik": "^30.3.1"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.1",
+    "nodemon": "^2.0.19",
+    "puppeteer": "^16.2.0",
+    "puppeteer-cmp-clicker": "^1.0.3"
+  }
+}

@@ -1,7 +1,17 @@
-const { getAllPhones } = require('./queries')
+const { getAllPhones, getFilteredPhones } = require('./queries')
 
 module.exports = (db) => async (req, res, next) => {
-  const data = await getAllPhones(db)
+  // GET / all products WITH FILTER
+
+  const filters = {
+    price_GT: req.query.price_GT,
+    price_LT: req.query.price_LT,
+    brands: req.query.brand,
+    colors: req.query.color,
+    storages: req.query.storage,
+  }
+
+  const data = await getFilteredPhones(db, { filters })
 
   if (!data) {
     next({
@@ -12,6 +22,7 @@ module.exports = (db) => async (req, res, next) => {
 
   return res.json({
     success: true,
+    results: data.length,
     data,
   })
 }

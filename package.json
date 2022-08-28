@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "docker:up": "docker-compose down && docker-compose up",
-    "seed": "NODE_ENV=development node --trace-warnings script/index.js",
+    "seed": "NODE_ENV=development node --trace-warnings script/index.js && npm run dev",
     "test": "NODE_ENV=test jest --verbose --silent --detectOpenHandles",
     "test:watch": "npm run test -- --watchAll",
     "dev": "NODE_ENV=development nodemon --trace-warnings src/index.js"

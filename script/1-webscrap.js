@@ -3,17 +3,13 @@ const { JSONfactory, PhoneDataFormater } = require('./helper')
 const { clickCmp } = require('puppeteer-cmp-clicker')
 const puppeteer = require('puppeteer')
 
-module.exports = async ({
-  destineDir,
-  headless = true,
-  retrieveAll = true,
-}) => {
+module.exports = async ({ destineDir, debug = false }) => {
   const { WS_BASE_URL, WS_URL } = process.env
 
   try {
     console.info('🚀 Starting webscrap')
 
-    const browser = await puppeteer.launch({ headless })
+    const browser = await puppeteer.launch({ headless: !debug })
     const page = await browser.newPage()
     await page.setViewport({ width: 1280, height: 800 })
 
@@ -22,7 +18,7 @@ module.exports = async ({
     await clickCmp({ page })
     await page.click('#onetrust-pc-btn-handler')
 
-    if (retrieveAll) {
+    if (!debug) {
       let loadSelector = await page.$('#PA-listado-terminales-mas-resultados')
       while (loadSelector !== null) {
         await page.evaluate((elm) => elm.click(), loadSelector)
@@ -173,7 +169,7 @@ module.exports = async ({
                 if (gb == 1) gb = 1024
                 storage.push(gb)
               })
-              return (items[key] = storage)
+              return (items.memoria_interna = storage)
             }
 
             if (key == 'memoria_ram') {
@@ -235,6 +231,15 @@ module.exports = async ({
     await [brands, colors, screens, storages, rams, phones].forEach(
       async (item) => await JSONfactory({ destineDir, item })
     )
+
+    if (debug) {
+      const fs = require('fs')
+      await fs.promises.writeFile(
+        `${destineDir}/OUTPUT.json`,
+        JSON.stringify(output),
+        'utf8'
+      )
+    }
 
     await browser.close()
     console.info({ total: output.length })

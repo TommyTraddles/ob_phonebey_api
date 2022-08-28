@@ -2,23 +2,24 @@ const path = require('path')
 const os = require('os')
 
 ;(async () => {
-  // ⛔️ SET '{ tmp: false }` TO STORE THE JSON WITHIN THE `script` directory
-  // ⛔️ SET `{ retrieveAll: false }` TO RETRIEVE ONLY 9 PHONES
-  // ⛔️ SET `{ headless: false }` TO VISUALIZE THE EXECUTION ON `chromium`
+  /**
+   * ⛔️ SET `{ debug: true }`
+   *
+   * TO ONLY RETRIEVE 9 ELEMENTS
+   * TO STORE THE JSON WITHIN THE `script` directory
+   * TO VISUALIZE THE EXECUTION ON `chromium`
+   */
+
   const setup = {
-    tmp: false,
-    retrieveAll: false,
-    headless: true,
+    debug: false,
   }
 
-  const tmp = setup.tmp
-  const storeInTmp = tmp ? os.tmpdir() : __dirname
-  const directory = path.join(storeInTmp, 'json')
+  const debugDir = setup.debug ? __dirname : os.tmpdir()
+  const directory = path.join(debugDir, 'json')
 
   await require('./1-webscrap')({
     destineDir: directory,
-    retrieveAll: setup.retrieveAll,
-    headless: setup.headless,
+    debug: setup.debug,
   })
 
   await require('./2-create-tables')

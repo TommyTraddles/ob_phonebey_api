@@ -34,12 +34,8 @@ JOIN storages AS s
   ON ps.storage_id = s.id
 `
 
-// 🔴 STORAGES IS LEAVING A PRODUCT OUT
-
 async function getFilteredPhones(db, { filters }) {
   try {
-    console.log({ filters })
-
     const filterQueries = [sql`TRUE`]
     const orderQueries = [sql`TRUE`]
 

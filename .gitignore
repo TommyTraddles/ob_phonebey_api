@@ -1,5 +1,9 @@
-node_modules 
-script/json
+# folders
+/node_modules 
+/script/json
+/public
+
+# files
 .env
 .DS_Store
 *.md

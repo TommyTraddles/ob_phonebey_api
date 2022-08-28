@@ -10,6 +10,7 @@ module.exports = (db) => {
   router.get('/get-filters', require('./get-filters')(db))
 
   // GET / GET ONE PRODUCT
+  router.get('/get-one/:id', require('./get-one-by-id')(db))
 
   // GET / YOU MAY ALSO LIKE (7 random)
 

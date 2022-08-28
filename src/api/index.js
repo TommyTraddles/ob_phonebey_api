@@ -1,21 +1,22 @@
+const inputValidator = require('./post-one/controller/input-validator')
 const router = require('express').Router()
+const upload = require('../config/multer')
 
 module.exports = (db) => {
   router.get('/', require('./main')(db))
 
-  // GET / all products WITH FILTERS + SORT
+  // retrive ALL phones WITH FILTERS + SORT values
   router.get('/get-all', require('./get-all-phones')(db))
 
-  // GET available filters
+  // retrieve ALL available filters
   router.get('/get-filters', require('./get-filters')(db))
 
-  // GET / GET ONE PRODUCT
+  // retrieve ONE phone by ID
   router.get('/get-one/:id', require('./get-one-by-id')(db))
 
-  // POST /one
-  router.get('/add', require('./post-one')(db))
+  // create ONE new phone
+  router.get('/add', upload, inputValidator, require('./post-one')(db))
 
-  // GET / YOU MAY ALSO LIKE (7 random)
   // DELETE / one
 
   return router

@@ -30,51 +30,33 @@ JOIN colors AS c
   ON pc.color_id = c.id
 `
 
-async function getAllPhones(db) {
-  try {
-    const { rows: data } = await (await db).query(sql`${allPhones}`)
-    if (!data) throw new Error('Phones couldn\t be retrieved')
-    return data
-  } catch (error) {
-    console.log('Error at quiery [getAllPhones]: ', error)
-    return false
-  }
-}
-
 async function getFilteredPhones(db, { filters }) {
   try {
     console.log(filters)
 
-    const filteredSQL = [sql`TRUE`]
+    const queries = [sql`TRUE`]
 
     // ✅ brand
     if (filters.brands) {
       if (Array.isArray(filters.brands)) {
-        filteredSQL.push(sql`b.brand IN (${sql.join(filters.brands, sql`, `)})`)
+        queries.push(sql`b.brand IN (${sql.join(filters.brands, sql`, `)})`)
       } else {
-        filteredSQL.push(sql`b.brand = ${filters.brands[0]}`)
+        queries.push(sql`b.brand = ${filters.brands}`)
       }
     }
-    // 🟨 storages
     // 🟨 prices
+    // 🟨 storages
     // 🟨 color
 
-    // 🔴 Query constructor
-    const whereSqlToken = sql.join(filteredSQL, sql` \nAND `)
+    // Query constructor
+    const filteredSQL = sql.join(queries, sql` AND `)
 
-    // execture query
-    // WHERE ${whereSqlToken}
+    const { rows: data } = await (
+      await db
+    ).query(sql`${allPhones} \n WHERE ${filteredSQL} GROUP BY b.brand, p.id`)
 
-    // ❌ ALL PHONES RETURN ERROR
-    const query =
-      filteredSQL.length == 1
-        ? sql`${allPhones}`
-        : sql`${allPhones} \n WHERE ${whereSqlToken} GROUP BY b.brand, p.id`
-
-    console.log('🔴 QUERY: ', query)
-
-    const { rows: data } = await (await db).query(sql`${query}`)
     if (!data) throw new Error('Phones couldn\t be retrieved')
+
     return data
   } catch (error) {
     console.log('Error at query [getFilteredPhones]: ', error)
@@ -83,6 +65,5 @@ async function getFilteredPhones(db, { filters }) {
 }
 
 module.exports = {
-  getAllPhones,
   getFilteredPhones,
 }

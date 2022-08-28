@@ -1,4 +1,4 @@
-const { getAllPhones, getFilteredPhones } = require('./queries')
+const { getFilteredPhones } = require('./queries')
 
 module.exports = (db) => async (req, res, next) => {
   // GET / all products WITH FILTER

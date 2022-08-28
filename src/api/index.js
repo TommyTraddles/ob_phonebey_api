@@ -12,10 +12,10 @@ module.exports = (db) => {
   // GET / GET ONE PRODUCT
   router.get('/get-one/:id', require('./get-one-by-id')(db))
 
-  // GET / YOU MAY ALSO LIKE (7 random)
-
   // POST /one
+  router.get('/add', require('./post-one')(db))
 
+  // GET / YOU MAY ALSO LIKE (7 random)
   // DELETE / one
 
   return router

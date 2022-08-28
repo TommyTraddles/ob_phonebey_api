@@ -45,6 +45,15 @@ async function getFilteredPhones(db, { filters }) {
       }
     }
     // 🟨 prices
+    if (filters.price_GT || filters.price_LT) {
+      if (filters.price_GT) {
+        queries.push(sql`p.price >= ${filters.price_GT}`)
+      }
+      if (filters.price_LT) {
+        queries.push(sql`p.price <= ${filters.price_LT}`)
+      }
+    }
+
     // 🟨 storages
     // 🟨 color
 

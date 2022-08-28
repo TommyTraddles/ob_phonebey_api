@@ -1,32 +1,48 @@
 const multer = require('multer')
 const path = require('path')
 
+// Directories
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination(req, file, cb) {
     cb(null, 'public/')
   },
-  filename: function (req, file, cb) {
-    const name = file.originalname.split('.')[0]
+  filename(req, file, cb) {
+    const name = path.parse(file.originalname).name
     const created = new Date()
     const date = created.toISOString().split('T')[0]
     const time = created.toLocaleTimeString()
 
-    cb(null, `${req.body.brand}-${req.body.name}_${name}-${date}-${time}`)
-  },
-  fileFilter: function (req, file, callback) {
-    var ext = path.extname(file.originalname)
-    if (ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
-      return callback(new Error('Only images are allowed'))
-    }
-    callback(null, true)
-  },
-  limits: {
-    fileSize: 1024 * 1024,
+    cb(null, `${date}-${time}_${req.body.brand}-${req.body.name}-${name}`)
   },
 })
 
-const upload = multer({
+// Allowed formats
+const fileFilter = (req, file, cb) => {
+  var ext = path.extname(file.originalname)
+  if (ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
+    return cb(new Error('Only images are allowed'))
+  }
+  cb(null, true)
+}
+
+// Allowed files
+const limits = {
+  fileSize: 1024 * 1024,
+}
+
+let upload = multer({
   storage,
-})
+  fileFilter,
+  limits,
+}).array('image', 4)
 
-module.exports = upload.array('image', 4)
+module.exports = (req, res, next) =>
+  upload(req, res, (error) => {
+    if (error) {
+      return next({
+        success: false,
+        error,
+      })
+    }
+    next()
+  })

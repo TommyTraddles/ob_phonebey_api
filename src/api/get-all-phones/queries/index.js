@@ -36,11 +36,8 @@ JOIN storages AS s
 
 async function getFilteredPhones(db, { filters }) {
   try {
-    console.log(filters)
-
     const queries = [sql`TRUE`]
 
-    // ✅ brand
     if (filters.brands) {
       if (Array.isArray(filters.brands)) {
         queries.push(sql`b.brand IN (${sql.join(filters.brands, sql`, `)})`)
@@ -48,7 +45,7 @@ async function getFilteredPhones(db, { filters }) {
         queries.push(sql`b.brand = ${filters.brands}`)
       }
     }
-    // ✅ prices
+
     if (filters.price_GT || filters.price_LT) {
       if (filters.price_GT) {
         queries.push(sql`p.price >= ${filters.price_GT}`)
@@ -57,7 +54,7 @@ async function getFilteredPhones(db, { filters }) {
         queries.push(sql`p.price <= ${filters.price_LT}`)
       }
     }
-    // ✅ storages
+
     if (filters.storages) {
       if (Array.isArray(filters.storages)) {
         queries.push(sql`s.storage IN (${sql.join(filters.storages, sql`, `)})`)
@@ -66,9 +63,14 @@ async function getFilteredPhones(db, { filters }) {
       }
     }
 
-    // 🟨 color
+    if (filters.colors) {
+      if (Array.isArray(filters.colors)) {
+        queries.push(sql`c.color IN (${sql.join(filters.colors, sql`, `)})`)
+      } else {
+        queries.push(sql`c.color = ${filters.colors}`)
+      }
+    }
 
-    // Query constructor
     const filteredSQL = sql.join(queries, sql` AND `)
 
     const { rows: data } = await (

@@ -10,7 +10,7 @@ async function getFilters(db) {
         storages: [],
       }
 
-      // add screen ?
+      // 🔴 add screen ?
 
       const { rows: colors } = await tx.query(sql`
         SELECT color
@@ -39,7 +39,9 @@ async function getFilters(db) {
           MAX(p.price) as max
         FROM phones AS p
       `)
-      prices.forEach((elm) => data.prices.push(Object.values(elm)))
+      prices.forEach((elm) =>
+        Object.values(elm).forEach((item) => data.prices.push(item))
+      )
 
       return data
     })

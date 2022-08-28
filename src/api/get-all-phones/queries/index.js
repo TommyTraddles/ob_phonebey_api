@@ -34,48 +34,71 @@ JOIN storages AS s
   ON ps.storage_id = s.id
 `
 
+// 🔴 STORAGES IS LEAVING A PRODUCT OUT
+
 async function getFilteredPhones(db, { filters }) {
   try {
-    const queries = [sql`TRUE`]
+    console.log({ filters })
+
+    const filterQueries = [sql`TRUE`]
+    const orderQueries = [sql`TRUE`]
 
     if (filters.brands) {
       if (Array.isArray(filters.brands)) {
-        queries.push(sql`b.brand IN (${sql.join(filters.brands, sql`, `)})`)
+        filterQueries.push(
+          sql`b.brand IN (${sql.join(filters.brands, sql`, `)})`
+        )
       } else {
-        queries.push(sql`b.brand = ${filters.brands}`)
+        filterQueries.push(sql`b.brand = ${filters.brands}`)
       }
     }
 
     if (filters.price_GT || filters.price_LT) {
       if (filters.price_GT) {
-        queries.push(sql`p.price >= ${filters.price_GT}`)
+        filterQueries.push(sql`p.price >= ${filters.price_GT}`)
       }
       if (filters.price_LT) {
-        queries.push(sql`p.price <= ${filters.price_LT}`)
+        filterQueries.push(sql`p.price <= ${filters.price_LT}`)
       }
     }
 
     if (filters.storages) {
       if (Array.isArray(filters.storages)) {
-        queries.push(sql`s.storage IN (${sql.join(filters.storages, sql`, `)})`)
+        filterQueries.push(
+          sql`s.storage IN (${sql.join(filters.storages, sql`, `)})`
+        )
       } else {
-        queries.push(sql`s.storage = ${filters.storages}`)
+        filterQueries.push(sql`s.storage = ${filters.storages}`)
       }
     }
 
     if (filters.colors) {
       if (Array.isArray(filters.colors)) {
-        queries.push(sql`c.color IN (${sql.join(filters.colors, sql`, `)})`)
+        filterQueries.push(
+          sql`c.color IN (${sql.join(filters.colors, sql`, `)})`
+        )
       } else {
-        queries.push(sql`c.color = ${filters.colors}`)
+        filterQueries.push(sql`c.color = ${filters.colors}`)
       }
     }
 
-    const filteredSQL = sql.join(queries, sql` AND `)
+    if (filters.order_by) {
+      if (filters.order_by == 'price ASC') orderQueries.push(sql`p.price`)
+      if (filters.order_by == 'price DESC') orderQueries.push(sql`p.price DESC`)
+      if (filters.order_by == 'name ASC') orderQueries.push(sql`p.name`)
+      if (filters.order_by == 'name DESC') orderQueries.push(sql`p.name DESC`)
+    }
 
-    const { rows: data } = await (
-      await db
-    ).query(sql`${allPhones} \n WHERE ${filteredSQL} GROUP BY b.brand, p.id`)
+    const filteredSQL = sql.join(filterQueries, sql` AND `)
+    const orderSQL = sql.join(orderQueries, sql`, `)
+
+    const query = sql`
+      ${allPhones} 
+      WHERE ${filteredSQL} 
+      GROUP BY b.brand, p.id
+      ORDER BY ${orderSQL}`
+
+    const { rows: data } = await (await db).query(query)
 
     if (!data) throw new Error('Phones couldn\t be retrieved')
 

@@ -1,8 +1,6 @@
 const { getFilteredPhones } = require('./queries')
 
 module.exports = (db) => async (req, res, next) => {
-  // GET / all products WITH FILTER
-
   const filters = {
     price_GT: req.query.price_GT,
     price_LT: req.query.price_LT,

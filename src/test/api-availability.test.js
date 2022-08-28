@@ -44,3 +44,19 @@ describe('GET /get-all', () => {
     })
   })
 })
+
+describe('GET /filters', () => {
+  const endpoint = '/get-filters'
+
+  test('Endpoint should be operative', async () => {
+    const expected = {
+      statusCode: 200,
+      success: true,
+    }
+    const query = await api.get(endpoint)
+    const response = JSON.parse(query.text)
+    expect(query.status).toEqual(expected.statusCode)
+    expect(response.success).toEqual(expected.success)
+  })
+
+})

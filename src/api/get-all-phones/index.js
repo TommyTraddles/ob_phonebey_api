@@ -7,12 +7,13 @@ module.exports = (db) => async (req, res, next) => {
     brands: req.query.brand,
     colors: req.query.color,
     storages: req.query.storage,
+    order_by: req.query.order_by,
   }
 
   const data = await getFilteredPhones(db, { filters })
 
   if (!data) {
-    next({
+    return next({
       success: false,
       error: new Error('Phones couldn\t be retrieved'),
     })

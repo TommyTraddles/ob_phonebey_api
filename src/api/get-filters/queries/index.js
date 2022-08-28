@@ -34,11 +34,12 @@ async function getFilters(db) {
       storages.forEach((elm) => data.storages.push(elm.storage))
 
       const { rows: prices } = await tx.query(sql`
-        SELECT DISTINCT price
-        FROM phones
-        ORDER BY price ASC
+        SELECT 
+          MIN(p.price) as min, 
+          MAX(p.price) as max
+        FROM phones AS p
       `)
-      prices.forEach((elm) => data.prices.push(elm.price))
+      prices.forEach((elm) => data.prices.push(Object.values(elm)))
 
       return data
     })

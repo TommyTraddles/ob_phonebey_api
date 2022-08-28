@@ -28,6 +28,10 @@ JOIN phones_colors AS pc
   ON pc.phone_id = p.id
 JOIN colors AS c
   ON pc.color_id = c.id
+JOIN phones_storages AS ps
+  ON ps.phone_id = p.id
+JOIN storages AS s
+  ON ps.storage_id = s.id
 `
 
 async function getFilteredPhones(db, { filters }) {
@@ -44,7 +48,7 @@ async function getFilteredPhones(db, { filters }) {
         queries.push(sql`b.brand = ${filters.brands}`)
       }
     }
-    // 🟨 prices
+    // ✅ prices
     if (filters.price_GT || filters.price_LT) {
       if (filters.price_GT) {
         queries.push(sql`p.price >= ${filters.price_GT}`)
@@ -53,8 +57,15 @@ async function getFilteredPhones(db, { filters }) {
         queries.push(sql`p.price <= ${filters.price_LT}`)
       }
     }
+    // ✅ storages
+    if (filters.storages) {
+      if (Array.isArray(filters.storages)) {
+        queries.push(sql`s.storage IN (${sql.join(filters.storages, sql`, `)})`)
+      } else {
+        queries.push(sql`s.storage = ${filters.storages}`)
+      }
+    }
 
-    // 🟨 storages
     // 🟨 color
 
     // Query constructor

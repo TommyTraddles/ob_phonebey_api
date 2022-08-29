@@ -1,18 +1,27 @@
 const multer = require('multer')
 const path = require('path')
+const fs = require('fs')
 
-// Directories
+const destineDir = path.join(__dirname, '../../', 'public')
+
+if (!fs.existsSync(destineDir)) {
+  fs.mkdirSync(destineDir)
+}
+
 const storage = multer.diskStorage({
+  // Directories
   destination(req, file, cb) {
-    cb(null, 'public/')
+    cb(null, destineDir)
   },
+
+  // filenames
   filename(req, file, cb) {
     const name = path.parse(file.originalname).name
     const created = new Date()
     const date = created.toISOString().split('T')[0]
-    const time = created.toLocaleTimeString()
+    const time = created.toLocaleTimeString().replace(/:/g, '-')
 
-    cb(null, `${date}-${time}_${req.body.brand}-${req.body.name}-${name}`)
+    cb(null, `${date}_${time}_${req.body.brand}-${req.body.name}-${name}`)
   },
 })
 

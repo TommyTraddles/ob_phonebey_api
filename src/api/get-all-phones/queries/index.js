@@ -100,7 +100,7 @@ async function getFilteredPhones(db, { filters }) {
 
     return data
   } catch (error) {
-    console.log('Error at query [getFilteredPhones]: ', error)
+    console.log('❌ Error at query [getFilteredPhones]: ', error)
     return false
   }
 }

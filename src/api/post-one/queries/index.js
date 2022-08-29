@@ -1,5 +1,6 @@
 const { cloudinary } = require('../../../config/cloudinary')
 const { sql } = require('slonik')
+const fs = require('fs')
 
 async function uploadImage({ phoneId, image }) {
   try {
@@ -11,6 +12,8 @@ async function uploadImage({ phoneId, image }) {
       unique_filename: false,
     })
     if (!secure_url) throw new Error('Cannot upload the image to Cloudinary')
+
+    await fs.promises.unlink(image.path)
 
     return secure_url
   } catch (error) {

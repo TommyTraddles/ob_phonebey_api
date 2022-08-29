@@ -1,9 +1,8 @@
 # folders
 /node_modules 
 /script/json
-/public
+/public/phone_images
 
 # files
 .env
 .DS_Store
-*.md

@@ -4,7 +4,7 @@ const { sql } = require('slonik')
 
 async function deleteImagesFromCloud(phoneId) {
   try {
-    const prefix = path.join('phoneybey', phoneId)
+    const prefix = path.join('phonebey', phoneId)
     await cloudinary.api.delete_resources_by_prefix(prefix)
     await cloudinary.api.delete_folder(prefix)
 

@@ -7,7 +7,7 @@ async function uploadImage({ phoneId, image }) {
     const { secure_url } = await cloudinary.uploader.upload(image.path, {
       format: 'jpg',
       overwrite: true,
-      folder: `phoneybey/${phoneId}`,
+      folder: `phonebey/${phoneId}`,
       use_filename: true,
       unique_filename: false,
     })

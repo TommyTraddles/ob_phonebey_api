@@ -2,7 +2,7 @@ const multer = require('multer')
 const path = require('path')
 const fs = require('fs')
 
-const destineDir = path.join(__dirname, '../../', 'public')
+const destineDir = path.join(__dirname, '../../', 'public', 'phone_images')
 
 if (!fs.existsSync(destineDir)) {
   fs.mkdirSync(destineDir)

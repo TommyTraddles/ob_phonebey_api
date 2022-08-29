@@ -1,6 +1,6 @@
 const { sql } = require('slonik')
 
-async function getOnePhone(db, { id }) {
+async function getOnePhone(db, { phoneId  }) {
   try {
     const onePhone = sql`
     SELECT 
@@ -64,7 +64,7 @@ async function getOnePhone(db, { id }) {
       JOIN screens AS sc
         ON p.screen_id = sc.id
 
-      WHERE p.id = ${id}
+      WHERE p.id = ${phoneId }
 
       GROUP BY b.brand, p.id, sc.screen
     `

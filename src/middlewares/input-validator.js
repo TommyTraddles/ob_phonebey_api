@@ -3,8 +3,7 @@ module.exports = (req, res, next) => {
     brand,
     name,
     price,
-    color,
-    images,
+    colors,
     bestseller,
     new: newPhone,
     ts_os,
@@ -39,7 +38,7 @@ module.exports = (req, res, next) => {
 
   if (!price) return handleInvalidInput(`Phone price should be defined`)
 
-  if (!color)
+  if (!colors)
     return handleInvalidInput(`Phone colors should contain at least one color`)
 
   if (!req.files[0])
@@ -48,11 +47,27 @@ module.exports = (req, res, next) => {
   if (!ts_scr_size)
     return handleInvalidInput(`Phone screen size should be defined`)
 
+  const screens = Number(ts_scr_size)
+
   if (!mm_ram)
     return handleInvalidInput(`Phone should have at least one ram value `)
 
+  const rams = []
+  if (Array.isArray(mm_ram)) {
+    mm_ram.forEach((elm) => rams.push(Number(elm)))
+  } else {
+    rams.push(Number(mm_ram))
+  }
+
   if (!mm_stg)
     return handleInvalidInput(`Phone should have at least one storage value `)
+
+  const storages = []
+  if (Array.isArray(mm_stg)) {
+    mm_stg.forEach((elm) => storages.push(Number(elm)))
+  } else {
+    storages.push(Number(mm_stg))
+  }
 
   function handleInvalidInput(message, statusCode = 400) {
     return next({
@@ -67,10 +82,10 @@ module.exports = (req, res, next) => {
     brand,
     name,
     price,
-    color,
-    images,
+    colors,
+    images: [],
     bestseller,
-    newPhone,
+    new: newPhone,
     ts_os,
     ts_os_version,
     ts_os_procesor,
@@ -79,14 +94,14 @@ module.exports = (req, res, next) => {
     ts_phy_weight,
     ts_phy_sim,
     ts_phy_cable,
-    ts_scr_size,
+    ts_scr_size: screens,
     ts_scr_tech,
     ts_scr_px,
     ts_scr_secu,
     ts_cam_main,
     ts_cam_front,
-    mm_ram,
-    mm_stg,
+    mm_ram: rams,
+    mm_stg: storages,
     ts_bat_type,
     ts_bat_char_t,
     ts_bat_char,

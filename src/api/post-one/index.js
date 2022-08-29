@@ -1,11 +1,25 @@
-const { addOnePhone } = require('./queries')
+const { createPhones } = require('./queries')
 
 module.exports = (db) => async (req, res, next) => {
-  // 🔴 ADD POST INPUT VALIDATOR
+  const { PHONE } = res.locals
 
-  const items = {}
+  const phones = [PHONE]
+  const brands = [PHONE.brand]
+  const screens = [PHONE.ts_scr_size]
+  const rams = PHONE.mm_ram
+  const colors = PHONE.colors
+  const storages = PHONE.mm_stg
 
-  const data = await addOnePhone(db, { items })
+  // 🔴 Handle input image on multer
+
+  const data = await createPhones(db, {
+    phones,
+    rams,
+    brands,
+    colors,
+    storages,
+    screens,
+  })
 
   if (!data) {
     return next({

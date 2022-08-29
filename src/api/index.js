@@ -29,9 +29,6 @@ module.exports = (db) => {
  * 
  * CLOUDINARY URL
  * 
- * SANITIZE POST INPUT
- * 
- * REFACTOR SEED-INSERT
  * 
  * CREATE TESTS
  * 

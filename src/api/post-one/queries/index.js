@@ -1,19 +1,22 @@
 const { cloudinary } = require('../../../config/cloudinary')
 const { sql } = require('slonik')
 
-async function uploadImage(image) {
-  // UPLOAD TO CLOUDINARY
+async function uploadImage({ phoneId, image }) {
+  try {
+    const { secure_url } = await cloudinary.uploader.upload(image.path, {
+      format: 'jpg',
+      overwrite: true,
+      folder: `phoneybey/${phoneId}`,
+      use_filename: true,
+      unique_filename: false,
+    })
+    if (!secure_url) throw new Error('Cannot upload the image to Cloudinary')
 
-  // 🔴 UPDATE IMAGE LINK WITH CLOUDINARY
-  console.log('🔴', { image })
-
-  const options = {
-    use_filename: false,
-    unique_filename: false,
-    overwrite: true,
+    return secure_url
+  } catch (error) {
+    console.error('❌ Error at query [uploadImage]: ', error)
+    return false
   }
-
-  return '🔴 PEX-' + ~~(Math.random() * 100)
 }
 
 async function createPhones(
@@ -225,12 +228,20 @@ async function createPhones(
           RETURNING id;
       `)
           phonesIds[phone.name] = id
-          data = 'Phone successfully created'
+          data = {
+            phone_id: id,
+            message: 'Phone successfully created',
+          }
 
           if (phone.images) {
             for (let image of phone.images) {
               if (typeof image != 'string') {
-                image = await uploadImage(image)
+                const url = await uploadImage({
+                  phoneId: phonesIds[phone.name],
+                  image,
+                })
+                if (!url) throw new Error('URL cannot be retrieved')
+                image = url
               }
 
               const {
@@ -300,13 +311,17 @@ async function createPhones(
           }
         } else {
           phonesIds[phone.name] = result?.id
-          data = 'Another phone shares the exact same name, please chage it'
+          data = {
+            phone_id: result?.id,
+            message:
+              'Another phone shares the exact same name, please chage it',
+          }
         }
       }
       return data
     })
   } catch (error) {
-    console.log('Error at quiery [createPhones]: ', error)
+    console.log('❌ Error at query [createPhones]: ', error)
     return false
   }
 }

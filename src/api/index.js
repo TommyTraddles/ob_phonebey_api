@@ -3,8 +3,6 @@ const router = require('express').Router()
 const upload = require('../config/multer')
 
 module.exports = (db) => {
-  router.get('/', require('./main')(db))
-
   // retrive ALL phones WITH FILTERS + SORT values
   router.get('/get-all', require('./get-all-phones')(db))
 
@@ -22,19 +20,3 @@ module.exports = (db) => {
 
   return router
 }
-
-/**
- *
- * ❌ TO-DO
- *
- *
- * CREATE TESTS
- *
- *
- * EXPORT POSTMAN
- *
- * WRITE README
- *
- * PUSH REPO
- *
- */

@@ -8,7 +8,8 @@
     "seed": "NODE_ENV=development node --trace-warnings script/index.js",
     "test": "NODE_ENV=test jest --verbose --silent --detectOpenHandles",
     "test:watch": "npm run test -- --watchAll",
-    "dev": "NODE_ENV=development nodemon --trace-warnings src/index.js"
+    "dev": "NODE_ENV=development nodemon --trace-warnings src/index.js",
+    "start": "NODE_ENV=production node src/index.js"
   },
   "keywords": [],
   "author": "",

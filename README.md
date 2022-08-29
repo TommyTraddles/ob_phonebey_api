@@ -4,7 +4,7 @@
 
 > 1. Scope [ Backend structure ]
 
-- The architecture is designed to fulfill the needs of this UX/UI [Prototype](https://www.figma.com/proto/6H5DNUE4O129pjUkssCW55/ob_phonebey?node-id=12%3A17).
+- The architecture is designed to fulfill the needs of this UX/UI [Prototype](https://www.figma.com/proto/6H5DNUE4O129pjUkssCW55/ob_phonebey?node-id=87%3A131).
 
 > 2. Seed / Web scraping
 

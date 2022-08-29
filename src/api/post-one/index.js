@@ -10,8 +10,6 @@ module.exports = (db) => async (req, res, next) => {
   const colors = PHONE.colors
   const storages = PHONE.mm_stg
 
-  // 🔴 Handle input image on multer
-
   const data = await createPhones(db, {
     phones,
     rams,

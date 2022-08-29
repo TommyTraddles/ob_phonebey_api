@@ -1,14 +1,19 @@
 const { cloudinary } = require('../../../config/cloudinary')
 const { sql } = require('slonik')
 
-async function uploadImage() {
+async function uploadImage(image) {
   // UPLOAD TO CLOUDINARY
+
+  // 🔴 UPDATE IMAGE LINK WITH CLOUDINARY
+  console.log('🔴', { image })
 
   const options = {
     use_filename: false,
     unique_filename: false,
     overwrite: true,
   }
+
+  return '🔴 PEX-' + ~~(Math.random() * 100)
 }
 
 async function createPhones(
@@ -141,6 +146,8 @@ async function createPhones(
         storageIds[storage] = id
       }
 
+      let data
+
       // PHONE QUERIES
       for (let phone of phones) {
         const {
@@ -218,83 +225,85 @@ async function createPhones(
           RETURNING id;
       `)
           phonesIds[phone.name] = id
-        } else {
-          phonesIds[phone.name] = result?.id
-        }
+          data = 'Phone successfully created'
 
-        // 🔴 INSERT PHONE RETURNING ID -> use SEED
+          if (phone.images) {
+            for (let image of phone.images) {
+              if (typeof image != 'string') {
+                image = await uploadImage(image)
+              }
 
-        if (phone.images) {
-          for (let image of phone.images) {
-            console.log({ image })
-
-            const {
-              rows: [result],
-            } = await tx.query(sql`
+              const {
+                rows: [result],
+              } = await tx.query(sql`
               SELECT url, id
               FROM images
               WHERE phone_id = ${phonesIds[phone.name]};
             `)
-            if (result?.url == image) continue
-            await tx.query(sql`
+              if (result?.url == image) continue
+              await tx.query(sql`
               INSERT INTO images(phone_id, url)
               VALUES (${phonesIds[phone.name]}, ${image})
             `)
+            }
           }
-        }
 
-        if (phone.colors) {
-          for (let color of phone.colors) {
-            const { rowCount } = await tx.query(sql`
+          if (phone.colors) {
+            for (let color of phone.colors) {
+              const { rowCount } = await tx.query(sql`
               SELECT id
               FROM phones_colors
               WHERE phone_id = ${phonesIds[phone.name]} AND color_id = ${
-              colorIds[color]
-            }
+                colorIds[color]
+              }
         `)
-            if (rowCount) continue
-            await tx.query(sql`
+              if (rowCount) continue
+              await tx.query(sql`
               INSERT INTO phones_colors(phone_id, color_id)
               VALUES (${phonesIds[phone.name]}, ${colorIds[color]})
         `)
+            }
           }
-        }
 
-        if (phone.mm_ram) {
-          for (let ram of phone.mm_ram) {
-            const { rowCount } = await tx.query(sql`
+          if (phone.mm_ram) {
+            for (let ram of phone.mm_ram) {
+              const { rowCount } = await tx.query(sql`
             SELECT id
             FROM phones_rams
             WHERE phone_id = ${phonesIds[phone.name]} AND ram_id = ${
-              ramIds[ram]
-            }
+                ramIds[ram]
+              }
             `)
-            if (rowCount) continue
-            await tx.query(sql`
+              if (rowCount) continue
+              await tx.query(sql`
               INSERT INTO phones_rams(phone_id, ram_id)
               VALUES (${phonesIds[phone.name]}, ${ramIds[ram]})
         `)
+            }
           }
-        }
 
-        if (phone.mm_stg) {
-          for (let storage of phone.mm_stg) {
-            const { rowCount } = await tx.query(sql`
+          if (phone.mm_stg) {
+            for (let storage of phone.mm_stg) {
+              const { rowCount } = await tx.query(sql`
             SELECT id
             FROM phones_storages
             WHERE phone_id = ${phonesIds[phone.name]} AND storage_id = ${
-              storageIds[storage]
-            }
+                storageIds[storage]
+              }
             `)
-            if (rowCount) continue
-            await tx.query(sql`
+              if (rowCount) continue
+              await tx.query(sql`
               INSERT INTO phones_storages(phone_id, storage_id)
               VALUES (${phonesIds[phone.name]}, ${storageIds[storage]})
         `)
+            }
           }
+        } else {
+          phonesIds[phone.name] = result?.id
+          data = 'Another phone shares the exact same name, please chage it'
         }
       }
-      return true
+      return data
     })
   } catch (error) {
     console.log('Error at quiery [createPhones]: ', error)

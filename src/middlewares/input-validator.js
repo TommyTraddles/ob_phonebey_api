@@ -83,7 +83,7 @@ module.exports = (req, res, next) => {
     name,
     price,
     colors,
-    images: [],
+    images: req.files,
     bestseller,
     new: newPhone,
     ts_os,

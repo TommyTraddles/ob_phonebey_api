@@ -1,4 +1,4 @@
-const inputValidator = require('./post-one/controller/input-validator')
+const inputValidator = require('../middlewares/input-validator')
 const router = require('express').Router()
 const upload = require('../config/multer')
 
@@ -21,3 +21,26 @@ module.exports = (db) => {
 
   return router
 }
+
+
+/**
+ * 
+ * ❌ TO-DO
+ * 
+ * CLOUDINARY URL
+ * 
+ * SANITIZE POST INPUT
+ * 
+ * REFACTOR SEED-INSERT
+ * 
+ * CREATE TESTS
+ * 
+ * DELETE ONE PHONE
+ * 
+ * EXPORT POSTMAN
+ * 
+ * WRITE README
+ * 
+ * PUSH REPO
+ * 
+ */

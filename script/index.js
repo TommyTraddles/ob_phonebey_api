@@ -3,7 +3,7 @@ const os = require('os')
 
 ;(async () => {
   /**
-   * ⛔️ SET `{ debug: true }`
+   * ⛔️ SET `npm run seed -- debug`
    *
    * TO ONLY RETRIEVE 9 ELEMENTS
    * TO STORE THE JSON WITHIN THE `script` directory
@@ -11,7 +11,7 @@ const os = require('os')
    */
 
   const setup = {
-    debug: false,
+    debug: process.argv[2] == 'debug',
   }
 
   const debugDir = setup.debug ? __dirname : os.tmpdir()

@@ -12,32 +12,29 @@ module.exports = (db) => {
   router.get('/get-filters', require('./get-filters')(db))
 
   // retrieve ONE phone by ID
-  router.get('/get-one/:id', require('./get-one-by-id')(db))
+  router.get('/get-one/:phoneId', require('./get-one-by-id')(db))
 
   // create ONE new phone
-  router.get('/add', upload, inputValidator, require('./post-one')(db))
+  router.post('/add', upload, inputValidator, require('./post-one')(db))
 
-  // DELETE / one
+  // DELETE ONE phone
+  router.delete('/delete/:phoneId', require('./delete-one')(db))
 
   return router
 }
 
-
 /**
- * 
+ *
  * ❌ TO-DO
- * 
- * CLOUDINARY URL
- * 
- * 
+ *
+ *
  * CREATE TESTS
- * 
- * DELETE ONE PHONE
- * 
+ *
+ *
  * EXPORT POSTMAN
- * 
+ *
  * WRITE README
- * 
+ *
  * PUSH REPO
- * 
+ *
  */

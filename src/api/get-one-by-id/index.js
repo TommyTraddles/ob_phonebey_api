@@ -1,9 +1,9 @@
 const { getOnePhone } = require('./queries')
 
 module.exports = (db) => async (req, res, next) => {
-  let { id } = req.params
+  let { phoneId } = req.params
 
-  const data = await getOnePhone(db, { id })
+  const data = await getOnePhone(db, { phoneId })
 
   if (!data) {
     return next({

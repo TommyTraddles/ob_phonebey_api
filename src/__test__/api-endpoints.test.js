@@ -485,4 +485,70 @@ describe('DELETE /delete/:id', () => {
   })
 })
 
+describe('POST /add', () => {
+  const endpoint = '/add'
 
+  describe('Should return error', () => {
+    test('when passed no brand', async () => {
+      const body = {}
+      const req = await api.post(endpoint).send(body)
+      const response = JSON.parse(req.text)
+
+      expect(req.status).toEqual(400)
+      expect(response.success).not.toBeTruthy()
+    })
+
+    test('when passed no name', async () => {
+      const body = { brand: 'brand' }
+      const req = await api.post(endpoint).send(body)
+      const response = JSON.parse(req.text)
+
+      expect(req.status).toEqual(400)
+      expect(response.success).not.toBeTruthy()
+    })
+
+    test('when passed no price', async () => {
+      const body = { brand: 'brand', name: 'name' }
+      const req = await api.post(endpoint).send(body)
+      const response = JSON.parse(req.text)
+
+      expect(req.status).toEqual(400)
+      expect(response.success).not.toBeTruthy()
+    })
+
+    test('when passed no color', async () => {
+      const body = { brand: 'brand', name: 'name', price: 99 }
+      const req = await api.post(endpoint).send(body)
+      const response = JSON.parse(req.text)
+
+      expect(req.status).toEqual(400)
+      expect(response.success).not.toBeTruthy()
+    })
+
+    // 🟨 IMAGE
+
+    // test('when passed no image', async () => {
+    //   const body = {
+    //     brand: 'brand',
+    //     name: 'name',
+    //     price: 99,
+    //     colors: 'azul',
+    //   }
+    //   const req = await api.post(endpoint).send(body)
+    //   const response = JSON.parse(req.text)
+
+    //   expect(req.status).toEqual(400)
+    //   expect(response.success).not.toBeTruthy()
+
+    //   expect(response).toEqual('error')
+    // })
+
+    // 🟨 SCREEN_SIZE
+
+    // 🟨 MM_RAM
+
+    // 🟨 MM_STG
+
+    // 🟨 OK
+  })
+})

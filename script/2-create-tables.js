@@ -39,7 +39,7 @@ module.exports = (async () => {
         id                 uuid            PRIMARY KEY default uuid_generate_v4(),
         brand_id           uuid            not null default uuid_generate_v4(),
         name               VARCHAR(30)     not null,
-        price              MONEY           default 0,
+        price              INTEGER         default 0,
         bestseller         BOOLEAN         default false,
         new                BOOLEAN         default false,
         ts_os              VARCHAR(50)     ,

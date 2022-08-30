@@ -161,6 +161,8 @@ npm run start
 
 - Execute all available tests (`/src/test`)
 
+<img src="./public/test-suite.jpg">
+
 <hr/>
 
 ### `npm run start`

@@ -8,60 +8,127 @@ beforeAll(async () => {
   })
 })
 
-afterAll(async () => {
-  await require('../../script/4-delete-tables')
-})
+// afterAll(async () => {
+//   await require('../../script/4-delete-tables')
+// })
 
-describe('get all', () => {
-  const endpoint = '/get-all'
+//  GET-FILTERS
 
-  test('return', async () => {
+describe('GET /get-filters', () => {
+  const endpoint = '/get-filters'
+
+  test('Should be operative', async () => {
     const req = await api.get(endpoint)
     const response = JSON.parse(req.text)
+    expect(req.status).toEqual(200)
+    expect(response.success).toBeTruthy()
+  })
 
-    expect(response).toBe(false)
+  test('Should return all available colors', async () => {
+    const colors = [
+      'azul',
+      'blanco',
+      'dorado',
+      'grafito',
+      'gris',
+      'lavanda',
+      'morado',
+      'negro',
+      'oro',
+      'plata',
+      'verde',
+    ]
+    const req = await api.get(endpoint)
+    const response = JSON.parse(req.text)
+    expect(response.data.colors).toEqual(colors)
+  })
+
+  test('Should return all available brands', async () => {
+    const brands = ['Motorola', 'OPPO', 'Samsung', 'Xiaomi', 'iPhone']
+    const req = await api.get(endpoint)
+    const response = JSON.parse(req.text)
+    expect(response.data.brands).toEqual(brands)
+  })
+
+  test('Should return all available prices', async () => {
+    const prices = ['$199.00', '$1,799.00']
+    const req = await api.get(endpoint)
+    const response = JSON.parse(req.text)
+    expect(response.data.prices).toEqual(prices)
+  })
+
+  test('Should return all available storages', async () => {
+    const storages = [64, 128, 256, 512, 1024]
+    const req = await api.get(endpoint)
+    const response = JSON.parse(req.text)
+    expect(response.data.storages).toEqual(storages)
   })
 })
 
-// describe('GET /get-all', () => {
-//   const endpoint = '/get-all'
 
-//   test('Endpoint should be operative', async () => {
-//     const expected = {
-//       statusCode: 200,
-//       success: true,
-//     }
-//     const req = await api.get(endpoint)
-//     const response = JSON.parse(req.text)
-//     expect(req.status).toEqual(expected.statusCode)
-//     expect(response.success).toEqual(expected.success)
-//   })
 
-//   test('Endpoint should return all phones', async () => {
-//     const req = await api.get(endpoint)
-//     const response = JSON.parse(req.text)
 
-//     response.data.forEach((phone) => {
-//       expect(phone.id).toBeDefined()
-//       expect(phone.new).toBeDefined()
-//       expect(phone.name).toBeDefined()
-//       expect(phone.brand).toBeDefined()
-//       expect(phone.price).toBeDefined()
-//       expect(phone.color).toBeDefined()
-//       expect(phone.images).toBeDefined()
-//       expect(phone.bestseller).toBeDefined()
-//     })
-//   })
 
-//   // 🔴
-//   test('Query: one brand as a string', async () => {
-//     const query = `${endpoint}?brand=black`
-//     const req = await api.get(query)
-//   })
+//  GET-ALL
 
-//   // 🔴
-//   test('Query: two brand as an array', async () => {
-//     const query = `${endpoint}?brand=iPhone&brand=Xiaomi`
-//     const req = await api.get(query)
-//   })
-// })
+/**
+ *
+ * ✅
+ * none
+ * Brand
+ * Brand []
+ * Price GT
+ * Price LT
+ * Price GT  - LT
+ * storage
+ * storage []
+ * color
+ * color []
+ * order name
+ * order name DESC
+ * order price
+ * order price DESC
+ * filter 1 + order
+ * filter 2 + order
+ * filter 3 + order
+ *
+ */
+
+//  GET-ONE
+/**
+ *
+ * ✅
+ * id OK
+ * ❌
+ * id BAD
+ *
+ */
+
+//  ADD
+/**
+ * ❌
+ * brand
+ * name
+ * colors
+ * images
+ * no jpg | png | jpeg
+ * + 1mb
+ *
+ * screen_size
+ * mm_ram
+ * mm_stg
+ *
+ * ✅
+ * ok
+ *
+ */
+
+//  DELETE
+/**
+ *
+ * ✅
+ * id OK
+ * ❌
+ * id BAD
+ *
+ */

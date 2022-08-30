@@ -17,6 +17,9 @@ module.exports = (async () => {
         DELETE FROM images CASCADE;
       `)
       await tx.query(sql`
+        DELETE FROM colors CASCADE;
+      `)
+      await tx.query(sql`
         DELETE FROM phones CASCADE;
       `)
       await tx.query(sql`

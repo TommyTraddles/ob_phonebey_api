@@ -321,6 +321,14 @@ async function createPhones(
           }
         }
       }
+      data.ids = {
+        ramIds,
+        brandIds,
+        colorIds,
+        phonesIds,
+        screenIds,
+        storageIds,
+      }
       return data
     })
   } catch (error) {

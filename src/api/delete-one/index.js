@@ -8,6 +8,7 @@ module.exports = (db) => async (req, res, next) => {
   if (!data) {
     return next({
       success: false,
+      statusCode: 400, 
       error: new Error("Phone couln't be deleted"),
     })
   }

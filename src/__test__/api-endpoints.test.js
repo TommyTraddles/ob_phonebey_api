@@ -10,9 +10,9 @@ beforeAll(async () => {
   })
 })
 
-// afterAll(async () => {
-//   await require('../../script/4-delete-tables')
-// })
+afterAll(async () => {
+  await require('../../script/4-delete-tables')
+})
 
 //  GET-FILTERS
 describe('GET /get-filters', () => {
@@ -77,10 +77,14 @@ describe('GET /get-all', () => {
   })
 
   test('Should return the necesary info to render on catalog', async () => {
+    const expected = {
+      results: 9,
+    }
     const query = `${endpoint}`
     const req = await api.get(query)
     const response = JSON.parse(req.text)
 
+    expect(response.results).toEqual(expected.results)
     response.data.forEach((phone) => {
       expect(phone.id).not.toBeNull()
       expect(phone.brand).not.toBeNull()
@@ -458,34 +462,27 @@ describe('GET /one/:id', () => {
   })
 })
 
+describe('DELETE /delete/:id', () => {
+  const endpoint = '/delete'
+
+  test('Should return error when passed an invalid phone id', async () => {
+    const query = `${endpoint}/1`
+    const req = await api.delete(query)
+    const response = JSON.parse(req.text)
+
+    expect(req.status).toEqual(400)
+    expect(response.success).not.toBeTruthy()
+  })
+
+  test('Should delete a phone by id', async () => {
+    const id = Object.values(IDs.ids.phonesIds)[0]
+    const query = `${endpoint}/${id}`
+    const req = await api.delete(query)
+    const response = JSON.parse(req.text)
+
+    expect(req.status).toEqual(200)
+    expect(response.success).toBeTruthy()
+  })
+})
 
 
-
-//  ADD
-/**
- * ❌
- * brand
- * price
- * colors
- * images
- * no jpg | png | jpeg
- * + 1mb
- *
- * screen_size
- * mm_ram
- * mm_stg
- *
- * ✅
- * ok
- *
- */
-
-//  DELETE
-/**
- *
- * ✅
- * id OK
- * ❌
- * id BAD
- *
- */

@@ -43,8 +43,7 @@ async function deleteOne(db, { phoneId }) {
         DELETE from phones_storages WHERE phone_id = ${phoneId};
       `)
 
-      const action = await deleteImagesFromCloud(phoneId)
-      if (!action) throw new Error("Images couldn't be deleted from cloudinary")
+      await deleteImagesFromCloud(phoneId)
 
       await tx.query(sql`
         DELETE from images WHERE phone_id = ${phoneId};

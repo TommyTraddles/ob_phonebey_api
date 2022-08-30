@@ -12,6 +12,10 @@ beforeAll(async () => {
 
 afterAll(async () => {
   await require('../../script/4-delete-tables')
+
+  await require('../../script/3-seed-tables')({
+    sourceDir: path.join(__dirname, 'json'),
+  })
 })
 
 //  GET-FILTERS

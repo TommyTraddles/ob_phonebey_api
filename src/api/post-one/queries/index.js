@@ -152,7 +152,7 @@ async function createPhones(
         storageIds[storage] = id
       }
 
-      let data
+      let data = {}
 
       // PHONE QUERIES
       for (let phone of phones) {

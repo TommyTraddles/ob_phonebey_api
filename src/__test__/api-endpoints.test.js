@@ -2,8 +2,10 @@ const { app } = require('../index')
 const api = require('supertest')(app)
 const path = require('path')
 
+let IDs = {}
+
 beforeAll(async () => {
-  await require('../../script/3-seed-tables')({
+  IDs = await require('../../script/3-seed-tables')({
     sourceDir: path.join(__dirname, 'json'),
   })
 })
@@ -248,7 +250,7 @@ describe('GET /get-all', () => {
     })
 
     // ORDERED BY
-    
+
     test('order by price DESC', async () => {
       const expected = {
         order_by: 'price DESC',
@@ -405,17 +407,59 @@ describe('GET /get-all', () => {
   })
 })
 
+describe('GET /one/:id', () => {
+  const endpoint = '/get-one'
+
+  test('Should return error when passed an invalid phone id', async () => {
+    const query = `${endpoint}/1`
+    const req = await api.get(query)
+    const response = JSON.parse(req.text)
+
+    expect(response.success).not.toBeTruthy()
+  })
+
+  test('Should return the complete info of each phone', async () => {
+    Object.values(IDs.ids.phonesIds).forEach(async (phoneId) => {
+      const query = `${endpoint}/${phoneId}`
+      const req = await api.get(query)
+      const response = JSON.parse(req.text)
+
+      expect(response.data.id).not.toBeNull()
+      expect(response.data.brand).not.toBeNull()
+      expect(response.data.name).not.toBeNull()
+      expect(response.data.price).not.toBeNull()
+      expect(response.data.bestseller).not.toBeNull()
+      expect(response.data.new).not.toBeNull()
+      expect(response.data.color).not.toBeNull()
+      expect(response.data.images).not.toBeNull()
+      expect(response.data[0]).toHaveProperty('storage')
+      expect(response.data[0]).toHaveProperty('ram')
+      expect(response.data[0]).toHaveProperty('ts_os')
+      expect(response.data[0]).toHaveProperty('ts_os_version')
+      expect(response.data[0]).toHaveProperty('ts_os_procesor')
+      expect(response.data[0]).toHaveProperty('ts_os_speed')
+      expect(response.data[0]).toHaveProperty('ts_phy_dimen')
+      expect(response.data[0]).toHaveProperty('ts_phy_weight')
+      expect(response.data[0]).toHaveProperty('ts_phy_weight')
+      expect(response.data[0]).toHaveProperty('ts_phy_sim')
+      expect(response.data[0]).toHaveProperty('ts_phy_cable')
+      expect(response.data[0]).toHaveProperty('ts_scr_size')
+      expect(response.data[0]).toHaveProperty('ts_scr_tech')
+      expect(response.data[0]).toHaveProperty('ts_scr_px')
+      expect(response.data[0]).toHaveProperty('ts_scr_secu')
+      expect(response.data[0]).toHaveProperty('ts_cam_main')
+      expect(response.data[0]).toHaveProperty('ts_cam_front')
+      expect(response.data[0]).toHaveProperty('ts_bat_type')
+      expect(response.data[0]).toHaveProperty('ts_bat_char_t')
+      expect(response.data[0]).toHaveProperty('ts_bat_char')
+      expect(response.data[0]).toHaveProperty('ts_net_other')
+      expect(response.data[0]).toHaveProperty('ts_other')
+    })
+  })
+})
 
 
-//  GET-ONE
-/**
- *
- * ✅
- * id OK
- * ❌
- * id BAD
- *
- */
+
 
 //  ADD
 /**

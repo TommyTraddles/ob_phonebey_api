@@ -47,6 +47,7 @@ module.exports = async ({ sourceDir }) => {
 
     console.info('✔ [ phones inserted ]')
     console.info('✅ Insertion done')
+    return result
   } catch (error) {
     console.error('> ❌ [Error] inserting JSON into database')
     console.error('>', error)
